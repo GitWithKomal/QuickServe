@@ -7,9 +7,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Verify application
         run: test -f app/index.html
+
+      - name: Show environment
+        run: echo "Environment=${{ vars.APP_ENV }}"
