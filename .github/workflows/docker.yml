@@ -28,4 +28,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/gitwithkomal/quickserve:latest
+          tags: |
+            ghcr.io/gitwithkomal/quickserve:latest
+            ghcr.io/gitwithkomal/quickserve:${{ github.sha }}
