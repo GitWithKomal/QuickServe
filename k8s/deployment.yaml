@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quickserve
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: quickserve
+  template:
+    metadata:
+      labels:
+        app: quickserve
+    spec:
+      containers:
+        - name: quickserve
+          image: ghcr.io/gitwithkomal/quickserve:3c47e33f8270e6c235d6f3352f7368442b9deb54
+          ports:
+            - containerPort: 80
