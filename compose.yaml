@@ -1,0 +1,6 @@
+services:
+  quickserve:
+    image: quickserve:1.0
+    container_name: quickserve
+    ports:
+      - "8080:80"
