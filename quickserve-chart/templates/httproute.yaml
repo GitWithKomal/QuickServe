@@ -1,4 +1,10 @@
 {{- if .Values.httpRoute.enabled -}}
+{{- if not .Values.httpRoute.parentRefs }}
+{{- fail "httpRoute.enabled is true, but httpRoute.parentRefs is missing. Configure a Kubernetes Gateway first." }}
+{{- end }}
+{{- if not .Values.httpRoute.rules }}
+{{- fail "httpRoute.enabled is true, but httpRoute.rules is missing. Configure at least one HTTPRoute rule." }}
+{{- end }}
 {{- $fullName := include "quickserve-chart.fullname" . -}}
 {{- $svcPort := .Values.service.port -}}
 apiVersion: gateway.networking.k8s.io/v1
