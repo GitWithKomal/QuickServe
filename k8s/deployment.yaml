@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: quickserve
+  namespace: development
 spec:
   replicas: 3
   selector:
@@ -14,6 +15,40 @@ spec:
     spec:
       containers:
         - name: quickserve
-          image: ghcr.io/gitwithkomal/quickserve:3c47e33f8270e6c235d6f3352f7368442b9deb54
+          image: ghcr.io/gitwithkomal/quickserve:9b650033cb12912da6f0d7656cc4f43115b3350a
           ports:
             - containerPort: 80
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "128Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: quickserve-config
+                  key: APP_ENV
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: quickserve-secret
+                  key: DB_PASSWORD
