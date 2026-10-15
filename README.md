@@ -2,6 +2,8 @@
 
 **Hands-on DevOps projects from Linux fundamentals to Kubernetes and AWS**
 
+**[View QuickServe Live](https://gitwithkomal.github.io/QuickServe/)**
+
 [![Linux](https://img.shields.io/badge/Linux-Ubuntu-orange?logo=linux&logoColor=white)](https://www.kernel.org/)
 [![Docker](https://img.shields.io/badge/Docker-Containers-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-Orchestration-326CE5?logo=kubernetes&logoColor=white)](https://kubernetes.io/)
@@ -157,12 +159,6 @@ QuickServe/
 ├── quickserve-ingress.yaml
 └── README.md
 ```
-
-## Live Demo
-
-**[View QuickServe Live](https://gitwithkomal.github.io/QuickServe/)**
-
-The static demo is deployed with GitHub Pages. Follow the Docker instructions below to run QuickServe locally.
 
 ## Run QuickServe Locally with Docker
 
