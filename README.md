@@ -158,6 +158,12 @@ QuickServe/
 └── README.md
 ```
 
+## Live Demo
+
+**[View QuickServe Live](https://gitwithkomal.github.io/QuickServe/)**
+
+The static demo is deployed with GitHub Pages. Follow the Docker instructions below to run QuickServe locally.
+
 ## Run QuickServe Locally with Docker
 
 ### Prerequisites
@@ -184,7 +190,7 @@ docker build -t quickserve:local .
 docker run --rm -p 8081:80 quickserve:local
 ```
 
-Open [http://localhost:8081](http://localhost:8081) in your browser.
+Open `http://localhost:8081` in your browser on the same machine running Docker.
 
 The port mapping `8081:80` maps host port `8081` to container port `80`. Choose another available host port if needed.
 
@@ -202,7 +208,6 @@ A successful response should include:
 HTTP/1.1 200 OK
 Server: nginx
 ```
-
 The Docker build and HTTP response have been verified locally.
 
 Press `Ctrl+C` in the container terminal to stop the test container. The `--rm` option removes the container when it stops; it does not delete the built image.
