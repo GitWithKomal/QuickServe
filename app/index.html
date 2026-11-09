@@ -598,6 +598,7 @@
         <nav class="navlinks" id="navlinks" aria-label="Main navigation">
           <a href="#pipeline">Pipeline</a>
           <a href="#activity">Live Activity</a>
+          <a href="#monitoring">Monitoring</a>
           <a href="#architecture">Architecture</a>
           <a href="#labs">Labs</a>
           <a href="#resources">Resources</a>
@@ -762,6 +763,60 @@
         </div>
       </section>
 
+      <section
+        class="section shell"
+        id="monitoring"
+        aria-labelledby="monitoring-title"
+      >
+        <div class="card panel-pad">
+          <div class="section-head">
+            <div>
+              <div class="kicker">Observability stack</div>
+              <h2 id="monitoring-title">Monitoring &amp; observability</h2>
+              <p class="section-desc">
+                Monitor Kubernetes deployment metrics, resource usage,
+                and alert conditions using Prometheus and Grafana.
+              </p>
+            </div>
+          </div>
+          <div class="grid two-col">
+            <article class="card panel-pad">
+              <h3>Grafana</h3>
+              <p class="section-desc">
+                Visualize deployment health, CPU, memory, pod restarts,
+                and node metrics.
+              </p>
+              <p><a class="text-link" href="http://localhost:3001"
+                target="_blank" rel="noopener noreferrer">Open Grafana &rarr;</a></p>
+              <small class="label">Local endpoint: localhost:3001</small>
+            </article>
+            <article class="card panel-pad">
+              <h3>Prometheus</h3>
+              <p class="section-desc">
+                Explore Kubernetes metrics, scrape targets,
+                and QuickServe alert rules.
+              </p>
+              <p><a class="text-link" href="http://localhost:9090"
+                target="_blank" rel="noopener noreferrer">Open Prometheus &rarr;</a></p>
+              <small class="label">Local endpoint: localhost:9090</small>
+            </article>
+            <article class="card panel-pad">
+              <h3>Alertmanager</h3>
+              <p class="section-desc">
+                Inspect alert states and notification routing.
+              </p>
+              <p><a class="text-link" href="http://localhost:9093"
+                target="_blank" rel="noopener noreferrer">Open Alertmanager &rarr;</a></p>
+              <small class="label">Local endpoint: localhost:9093</small>
+            </article>
+          </div>
+          <p class="status-note">
+            These are local lab services, not publicly hosted dashboards.
+            Access requires Minikube and the corresponding port-forward
+            sessions to be active.
+          </p>
+        </div>
+      </section>
       <section
         class="section shell"
         id="pipeline"
