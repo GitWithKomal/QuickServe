@@ -265,7 +265,35 @@ QuickServe is a learning and portfolio repository focused on practical DevOps wo
 
 The GitHub Actions CI workflow currently performs lightweight source-file verification rather than a comprehensive application test suite. The Kubernetes, Helm, and Ansible components are maintained as separate learning exercises. The React + Docker + AWS lab is also separate, and the presence of its deployment script does not itself confirm a successful ECS deployment.
 
-Further testing, monitoring, and automation improvements can be added as they are implemented and verified.
+## Monitoring and Observability
+
+QuickServe includes a local Kubernetes monitoring stack using Prometheus, Grafana, and Alertmanager.
+
+### Grafana Dashboard
+
+The QuickServe Operations Dashboard contains 10 panels covering:
+- Deployment availability, desired replicas, and unavailable replicas
+- Cluster CPU and memory utilization
+- QuickServe pod CPU, memory, and restart counts
+- CPU and memory usage across cluster nodes
+
+Dashboard export: `monitoring/grafana/quickserve-operations-dashboard.json`
+
+### Alerting
+
+Prometheus alert configuration: `quickserve-alerts.yml`
+
+The `QuickServeDeploymentUnavailable` alert detects when available deployment replicas remain below the desired count for 2 minutes.
+
+### Local Access
+
+Start the monitoring services using Minikube and port-forward them:
+
+- Grafana: `kubectl port-forward -n monitoring svc/grafana 3001:80`
+- Prometheus: `kubectl port-forward -n monitoring svc/prometheus-server 9090:80`
+- Alertmanager: `kubectl port-forward -n monitoring svc/prometheus-alertmanager 9093:9093`
+
+These dashboards and services run in the local lab environment and are not publicly hosted.
 
 ## Author
 
@@ -277,3 +305,5 @@ Software Engineer | DevOps
 - LinkedIn: [Komal Nimje](https://www.linkedin.com/in/komal-nimje-71593a286/)
 
 This repository documents a practical learning journey through containerization, CI/CD, orchestration, configuration management, and cloud deployment.
+
+

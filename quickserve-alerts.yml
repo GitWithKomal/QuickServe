@@ -1,0 +1,23 @@
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: quickserve-alerts
+        rules:
+          - alert: QuickServeDeploymentUnavailable
+            expr: |
+              kube_deployment_status_replicas_available{
+                namespace="quickserve",
+                deployment="quickserve-quickserve-chart"
+              }
+              <
+              kube_deployment_spec_replicas{
+                namespace="quickserve",
+                deployment="quickserve-quickserve-chart"
+              }
+            for: 2m
+            labels:
+              severity: warning
+              app: quickserve
+            annotations:
+              summary: "QuickServe deployment has unavailable replicas"
+              description: "QuickServe has fewer available replicas than desired."
