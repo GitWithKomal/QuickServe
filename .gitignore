@@ -1,0 +1,32 @@
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Terraform variable files may contain secrets
+*.tfvars
+*.tfvars.json
+
+# Local backups
+README.backup.md
+app/*.backup.html
+app/*.before-monitoring.html
+
+# Temporary monitoring and troubleshooting files
+*.db
+grafana-*-values.yaml
+kube-proxy-before-hostaliases.yaml
+netcheck-m02.yaml
+netcheck-m03.yaml
+
+# Local Terraform workspace - review before publishing
+terraform/
+
+# Temporary file
+/{.txt
+grafana-values.yaml
+monitoring/quickserve-operations-dashboard.json
