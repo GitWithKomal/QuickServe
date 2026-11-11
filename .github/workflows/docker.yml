@@ -1,4 +1,5 @@
-name: Docker Build and Push
+
+name: Docker Build, Push and AWS Deploy
 
 on:
   push:
@@ -7,6 +8,7 @@ on:
 permissions:
   contents: read
   packages: write
+  id-token: write
 
 jobs:
   docker:
@@ -31,3 +33,62 @@ jobs:
           tags: |
             ghcr.io/gitwithkomal/quickserve:latest
             ghcr.io/gitwithkomal/quickserve:${{ github.sha }}
+
+  deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Deploy QuickServe to EC2 through SSM
+        env:
+          INSTANCE_ID: i-0f55acad345a795d5
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          set -e
+
+          DEPLOY_COMMAND="set -e; docker pull ghcr.io/gitwithkomal/quickserve:${IMAGE_TAG}; docker stop quickserve || true; docker rm quickserve || true; docker run -d --restart unless-stopped --name quickserve -p 80:80 ghcr.io/gitwithkomal/quickserve:${IMAGE_TAG}"
+
+          PARAMETERS=$(jq -n --arg command "$DEPLOY_COMMAND" '{commands: [$command]}')
+
+          COMMAND_ID=$(aws ssm send-command \
+            --instance-ids "$INSTANCE_ID" \
+            --document-name "AWS-RunShellScript" \
+            --comment "Deploy QuickServe ${IMAGE_TAG}" \
+            --parameters "$PARAMETERS" \
+            --query "Command.CommandId" \
+            --output text)
+
+          echo "SSM Command ID: $COMMAND_ID"
+
+          for attempt in $(seq 1 60); do
+            STATUS=$(aws ssm get-command-invocation \
+              --command-id "$COMMAND_ID" \
+              --instance-id "$INSTANCE_ID" \
+              --query "Status" \
+              --output text 2>/dev/null || echo "Pending")
+
+            echo "Deployment status: $STATUS"
+
+            if [ "$STATUS" = "Success" ]; then
+              echo "QuickServe deployment successful!"
+              exit 0
+            fi
+
+            if [[ "$STATUS" == "Failed" || "$STATUS" == "TimedOut" || "$STATUS" == "Cancelled" ]]; then
+              aws ssm get-command-invocation \
+                --command-id "$COMMAND_ID" \
+                --instance-id "$INSTANCE_ID"
+              exit 1
+            fi
+
+            sleep 5
+          done
+
+          echo "Deployment timed out."
+          exit 1
