@@ -473,6 +473,33 @@ The monitoring exercises cover:
 - Node resource utilization.
 - Alert configuration.
 
+### QuickServe Operations Dashboard
+
+A Grafana dashboard was configured using Prometheus as its data source to visualize Kubernetes infrastructure and workload metrics.
+
+**Dashboard panels (10):**
+
+- Available, desired and unavailable deployment replicas.
+- Cluster CPU utilization.
+- Cluster memory utilization.
+- QuickServe pod CPU usage.
+- QuickServe pod memory usage.
+- Pod container restarts.
+- Node CPU utilization.
+- Node memory utilization.
+
+The dashboard provides visibility into deployment health, workload resource consumption and Kubernetes node utilization.
+
+**Environment:** Local Minikube Kubernetes cluster.
+
+### Dashboard Screenshot
+
+![QuickServe Grafana Operations Dashboard](docs/monitoring/quickserve-grafana-dashboard.png)
+
+**Exported Dashboard Configuration:** [View Grafana Dashboard JSON](docs/monitoring/quickserve-grafana-dashboard.json)
+
+**Note:** Grafana, Prometheus and Alertmanager run in the local Minikube environment. They are not publicly hosted.
+
 ### Local Access
 
 Grafana is accessed through Kubernetes port forwarding:
@@ -735,3 +762,4 @@ For Kubernetes, Helm, Ansible, and monitoring exercises, refer to their respecti
   <br>
   <sub>Documenting a practical journey into DevOps and cloud-native engineering.</sub>
 </p>
+
