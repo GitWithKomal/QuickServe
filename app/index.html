@@ -1,52 +1,79 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <meta name="theme-color" content="#0a1020" />
+
     <meta
       name="description"
       content="QuickServe DevOps lab: explore CI workflows, Docker image delivery, Kubernetes and Helm practice, and Ansible configuration management."
     />
+
     <title>QuickServe | DevOps Operations Lab</title>
+
     <style>
       :root {
         color-scheme: dark;
+
         --bg: #080d18;
+
         --panel: #0e1728;
+
         --panel-2: #111e32;
+
         --line: #22334b;
+
         --text: #edf5ff;
+
         --muted: #9aabc2;
+
         --teal: #5ce1c1;
+
         --blue: #77aaff;
+
         --purple: #b7a2ff;
+
         --amber: #ffd17c;
+
         --radius: 18px;
+
         --shadow: 0 18px 55px rgba(0, 0, 0, 0.22);
       }
+
       * {
         box-sizing: border-box;
       }
+
       html {
         scroll-behavior: smooth;
+
         scroll-padding-top: 90px;
       }
+
       body {
         margin: 0;
+
         background:
           radial-gradient(
             ellipse at 15% -10%,
+
             rgba(44, 105, 163, 0.2),
             transparent 42rem
           ),
           radial-gradient(
             ellipse at 100% 5%,
+
             rgba(48, 168, 145, 0.1),
             transparent 35rem
           ),
           var(--bg);
+
         color: var(--text);
+
         font:
           15px/1.6 Inter,
           ui-sans-serif,
@@ -56,537 +83,881 @@
           "Segoe UI",
           sans-serif;
       }
+
       a {
         color: inherit;
+
         text-decoration: none;
       }
+
       button {
         font: inherit;
       }
+
       .shell {
         width: min(1160px, calc(100% - 40px));
+
         margin-inline: auto;
       }
+
       .topbar {
         position: sticky;
+
         top: 0;
+
         z-index: 20;
+
         border-bottom: 1px solid rgba(80, 109, 145, 0.25);
+
         background: rgba(8, 13, 24, 0.88);
+
         backdrop-filter: blur(18px);
       }
+
       .nav {
         min-height: 72px;
+
         display: flex;
+
         align-items: center;
+
         justify-content: space-between;
+
         gap: 20px;
       }
+
       .brand {
         display: inline-flex;
+
         align-items: center;
+
         gap: 11px;
+
         font-weight: 800;
+
         letter-spacing: -0.03em;
       }
+
       .brand-mark {
         display: grid;
+
         place-items: center;
+
         width: 38px;
+
         height: 38px;
+
         border-radius: 12px;
+
         background: linear-gradient(
           145deg,
           rgba(92, 225, 193, 0.22),
           rgba(119, 170, 255, 0.18)
         );
+
         border: 1px solid rgba(92, 225, 193, 0.4);
+
         color: var(--teal);
       }
+
       .brand small {
         display: block;
+
         color: var(--muted);
+
         font-size: 10px;
+
         letter-spacing: 0.15em;
+
         font-weight: 700;
       }
+
       .navlinks {
         display: flex;
+
         align-items: center;
+
         gap: 23px;
+
         color: var(--muted);
+
         font-size: 13px;
       }
+
       .navlinks a:hover {
         color: var(--text);
       }
+
       .nav-cta,
       .button {
         display: inline-flex;
+
         align-items: center;
+
         justify-content: center;
+
         gap: 9px;
+
         border-radius: 11px;
+
         padding: 10px 15px;
+
         font-weight: 750;
+
         font-size: 13px;
+
         border: 1px solid var(--line);
+
         transition:
           transform 0.18s ease,
           border-color 0.18s ease,
           background 0.18s ease;
       }
+
       .nav-cta,
       .button-primary {
         background: var(--teal);
+
         color: #06211f;
+
         border-color: transparent;
       }
+
       .button-secondary {
         background: rgba(17, 30, 50, 0.75);
+
         color: var(--text);
       }
+
       .button:hover,
       .nav-cta:hover {
         transform: translateY(-2px);
       }
+
       .menu-toggle {
         display: none;
+
         border: 1px solid var(--line);
+
         color: var(--text);
+
         background: var(--panel);
+
         border-radius: 10px;
+
         padding: 8px 11px;
       }
+
       .hero {
         padding: 76px 0 42px;
       }
+
       .eyebrow {
         display: inline-flex;
+
         align-items: center;
+
         gap: 9px;
+
         color: var(--teal);
+
         font-size: 11px;
+
         font-weight: 800;
+
         letter-spacing: 0.16em;
+
         text-transform: uppercase;
       }
+
       .pulse {
         width: 7px;
+
         height: 7px;
+
         border-radius: 50%;
+
         background: var(--teal);
+
         box-shadow: 0 0 0 5px rgba(92, 225, 193, 0.1);
       }
+
       h1 {
         max-width: 800px;
+
         font-size: clamp(38px, 6vw, 68px);
+
         line-height: 1.04;
+
         letter-spacing: -0.055em;
+
         margin: 20px 0 20px;
       }
+
       h1 span {
         color: var(--teal);
       }
+
       .hero-copy {
         max-width: 690px;
+
         color: var(--muted);
+
         font-size: clamp(16px, 2vw, 18px);
+
         margin: 0;
       }
+
       .hero-actions {
         display: flex;
+
         flex-wrap: wrap;
+
         gap: 12px;
+
         margin-top: 28px;
       }
+
       .hero-note {
         color: #8194ad;
+
         font-size: 12px;
+
         margin-top: 20px;
       }
+
       .section {
         padding: 36px 0;
       }
+
       .section-head {
         display: flex;
+
         align-items: end;
+
         justify-content: space-between;
+
         gap: 20px;
+
         margin-bottom: 20px;
       }
+
       .kicker {
         color: var(--teal);
+
         font-size: 11px;
+
         font-weight: 800;
+
         letter-spacing: 0.15em;
+
         text-transform: uppercase;
+
         margin-bottom: 7px;
       }
+
       h2 {
         margin: 0;
+
         font-size: clamp(23px, 3vw, 31px);
+
         line-height: 1.2;
+
         letter-spacing: -0.035em;
       }
+
       .section-desc {
         color: var(--muted);
+
         max-width: 570px;
+
         margin: 9px 0 0;
+
         font-size: 14px;
       }
+
       .text-link {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
         color: var(--teal);
         font-weight: 750;
         font-size: 13px;
         white-space: nowrap;
+        cursor: pointer;
+        pointer-events: auto;
+        text-decoration: none;
       }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--teal);
+        outline-offset: 4px;
+      }
+
+      .activity-links {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 14px;
+      }
+
+      #activityRuns .card {
+        position: relative;
+        z-index: 1;
+      }
+
+      #activityRuns .card h3 {
+        margin-top: 0;
+      }
+
+      #activityRuns .card .text-link {
+        margin-top: 8px;
+      }
+
       .grid {
         display: grid;
+
         gap: 15px;
       }
+
       .metrics {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
+
       .card {
         min-width: 0;
+
         border: 1px solid var(--line);
+
         border-radius: var(--radius);
+
         background: linear-gradient(
           155deg,
           rgba(17, 30, 50, 0.92),
           rgba(12, 21, 36, 0.94)
         );
+
         box-shadow: var(--shadow);
       }
+
       .metric {
         padding: 20px;
       }
+
       .metric-top {
         display: flex;
+
         align-items: center;
+
         justify-content: space-between;
+
         gap: 10px;
       }
+
       .iconbox {
         width: 38px;
+
         height: 38px;
+
         display: grid;
+
         place-items: center;
+
         border-radius: 12px;
+
         background: rgba(92, 225, 193, 0.1);
+
         color: var(--teal);
+
         font-size: 18px;
       }
+
       .metric:nth-child(2) .iconbox {
         background: rgba(119, 170, 255, 0.12);
+
         color: var(--blue);
       }
+
       .metric:nth-child(3) .iconbox {
         background: rgba(183, 162, 255, 0.12);
+
         color: var(--purple);
       }
+
       .metric:nth-child(4) .iconbox {
         background: rgba(255, 209, 124, 0.12);
+
         color: var(--amber);
       }
+
       .label {
         color: var(--muted);
+
         font-size: 12px;
       }
+
       .metric strong {
         display: block;
+
         font-size: clamp(19px, 2.5vw, 25px);
+
         letter-spacing: -0.04em;
+
         margin-top: 17px;
+
         line-height: 1.2;
       }
+
       .metric small {
         display: block;
+
         color: #8fa2bc;
+
         font-size: 11px;
+
         margin-top: 7px;
       }
+
       .pipeline {
         padding: 22px;
       }
+
       .pipeline-flow {
         display: grid;
+
         grid-template-columns: repeat(5, minmax(0, 1fr));
+
         gap: 12px;
+
         margin-top: 23px;
       }
+
       .stage {
         position: relative;
+
         display: flex;
+
         flex-direction: column;
+
         gap: 8px;
+
         padding: 16px 13px;
+
         min-height: 116px;
+
         border: 1px solid #263b54;
+
         border-radius: 14px;
+
         background: rgba(7, 14, 26, 0.52);
       }
+
       .stage:not(:last-child)::after {
         content: "→";
+
         position: absolute;
+
         right: -14px;
+
         top: 36px;
+
         color: #6c829d;
+
         z-index: 2;
+
         font-size: 16px;
       }
+
       .stage-num {
         color: var(--teal);
+
         font-size: 10px;
+
         font-weight: 800;
+
         letter-spacing: 0.1em;
       }
+
       .stage strong {
         font-size: 13px;
       }
+
       .stage span:last-child {
         color: var(--muted);
+
         font-size: 11px;
+
         line-height: 1.45;
       }
+
       .status-note {
         display: flex;
+
         gap: 10px;
+
         align-items: flex-start;
+
         padding: 13px 15px;
+
         margin-top: 17px;
+
         background: rgba(119, 170, 255, 0.07);
+
         border: 1px solid rgba(119, 170, 255, 0.18);
+
         border-radius: 12px;
+
         color: #afc2dc;
+
         font-size: 12px;
       }
+
       .status-note b {
         color: #d9e8ff;
       }
+
       .two-col {
         grid-template-columns: 1.1fr 0.9fr;
       }
+
       .panel-pad {
         padding: 22px;
       }
+
       .list {
         display: grid;
+
         gap: 12px;
+
         margin-top: 18px;
       }
+
       .list-item {
         display: flex;
+
         align-items: flex-start;
+
         gap: 12px;
+
         padding: 12px;
+
         border-radius: 13px;
+
         border: 1px solid rgba(42, 61, 86, 0.8);
+
         background: rgba(6, 13, 24, 0.32);
       }
+
       .list-item .mini-icon {
         flex: 0 0 34px;
+
         height: 34px;
+
         display: grid;
+
         place-items: center;
+
         border-radius: 10px;
+
         background: rgba(119, 170, 255, 0.1);
+
         color: var(--blue);
       }
+
       .list-item strong {
         display: block;
+
         font-size: 13px;
       }
+
       .list-item p {
         margin: 3px 0 0;
+
         color: var(--muted);
+
         font-size: 12px;
       }
+
       .tag-row {
         display: flex;
+
         flex-wrap: wrap;
+
         gap: 7px;
+
         margin-top: 16px;
       }
+
       .tag {
         border: 1px solid #2a405b;
+
         background: rgba(14, 27, 45, 0.8);
+
         border-radius: 7px;
+
         padding: 5px 8px;
+
         color: #b5c7de;
+
         font-size: 10px;
+
         font-weight: 750;
       }
+
       .resource-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
+
       .resource {
         padding: 19px;
+
         display: flex;
+
         flex-direction: column;
+
         align-items: flex-start;
+
         min-height: 190px;
       }
+
       .resource .resource-icon {
         font-size: 20px;
+
         margin-bottom: 13px;
+
         color: var(--teal);
       }
+
       .resource h3 {
         margin: 0;
+
         font-size: 15px;
+
         letter-spacing: -0.02em;
       }
+
       .resource p {
         margin: 8px 0 18px;
+
         color: var(--muted);
+
         font-size: 12px;
+
         flex: 1;
       }
+
       .resource a {
         font-size: 12px;
+
         color: var(--teal);
+
         font-weight: 800;
       }
+
       .resource a:hover,
       .text-link:hover {
         text-decoration: underline;
       }
+
       .notice {
         padding: 19px 21px;
+
         border: 1px solid rgba(255, 209, 124, 0.22);
+
         border-radius: var(--radius);
+
         background: rgba(255, 209, 124, 0.055);
+
         display: flex;
+
         align-items: flex-start;
+
         gap: 13px;
       }
+
       .notice-icon {
         color: var(--amber);
+
         font-size: 19px;
       }
+
       .notice h3 {
         margin: 0 0 5px;
+
         font-size: 14px;
       }
+
       .notice p {
         margin: 0;
+
         color: #b9c3d1;
+
         font-size: 12px;
       }
+
       .footer {
         margin-top: 28px;
+
         border-top: 1px solid var(--line);
+
         padding: 25px 0 35px;
+
         color: var(--muted);
+
         font-size: 12px;
       }
+
       .footer-inner {
         display: flex;
+
         justify-content: space-between;
+
         align-items: center;
+
         gap: 14px;
+
         flex-wrap: wrap;
       }
+
       .footer strong {
         color: var(--text);
       }
+
       .back-top {
         color: var(--teal);
       }
+
       @media (max-width: 850px) {
         .navlinks {
           gap: 14px;
         }
+
         .metrics {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+
         .pipeline-flow {
           grid-template-columns: repeat(3, minmax(0, 1fr));
         }
+
         .stage:not(:last-child)::after {
           display: none;
         }
+
         .two-col {
           grid-template-columns: 1fr;
         }
+
         .resource-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
+
       @media (max-width: 620px) {
         .shell {
           width: min(100% - 28px, 1160px);
         }
+
         .nav {
           min-height: 64px;
         }
+
         .menu-toggle {
           display: inline-flex;
         }
+
         .navlinks {
           display: none;
+
           position: absolute;
+
           top: 64px;
+
           left: 0;
+
           right: 0;
+
           padding: 15px 20px 20px;
+
           background: #0b1220;
+
           border-bottom: 1px solid var(--line);
+
           flex-direction: column;
+
           align-items: stretch;
         }
+
         .navlinks.open {
           display: flex;
         }
+
         .nav-cta {
           justify-content: center;
         }
+
         .hero {
           padding: 54px 0 28px;
         }
+
         .section {
           padding: 26px 0;
         }
+
         .section-head {
           align-items: flex-start;
+
           flex-direction: column;
         }
+
         .pipeline-flow {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+
         .resource-grid {
           grid-template-columns: 1fr;
         }
+
         .resource {
           min-height: auto;
         }
+
         .metric {
           padding: 15px;
         }
+
         .pipeline,
         .panel-pad {
           padding: 16px;
         }
       }
+
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
         *::after {
           scroll-behavior: auto !important;
+
           transition: none !important;
         }
       }
     </style>
   </head>
+
   <body>
     <header class="topbar">
       <div class="shell nav">
         <a class="brand" href="#top" aria-label="QuickServe home">
           <span class="brand-mark" aria-hidden="true">⌘</span>
+
           <span>QuickServe<small>DEVOPS OPERATIONS LAB</small></span>
         </a>
+
         <button
           class="menu-toggle"
           id="menuToggle"
@@ -595,18 +966,25 @@
         >
           Menu
         </button>
+
         <nav class="navlinks" id="navlinks" aria-label="Main navigation">
           <a href="#pipeline">Pipeline</a>
+
           <a href="#activity">Live Activity</a>
+
           <a href="#monitoring">Monitoring</a>
+
           <a href="#architecture">Architecture</a>
+
           <a href="#labs">Labs</a>
+
           <a href="#resources">Resources</a>
+
           <a
             class="nav-cta"
             href="https://github.com/GitWithKomal/QuickServe"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             >View repository ↗</a
           >
         </nav>
@@ -616,31 +994,37 @@
     <main id="top">
       <section class="hero shell">
         <div class="eyebrow">
-          <span class="pulse" aria-hidden="true"></span> Hands-on engineering ·
-          Learning project
+          <span class="pulse" aria-hidden="true"></span> DevOps Engineering ·
+          End-to-End Delivery
         </div>
+
         <h1>
           From code to container.<br /><span
-            >Built to understand delivery.</span
+            ># Engineering reliable, automated software delivery</span
           >
         </h1>
+
         <p class="hero-copy">
-          QuickServe is a practical DevOps lab exploring source control,
-          automated workflows, container image delivery, Kubernetes
-          configuration, and infrastructure automation — one step at a time.
+          QuickServe is an end-to-end DevOps project demonstrating automated
+          software delivery through source control, CI/CD pipelines,
+          containerization, Kubernetes orchestration, Helm-based deployments,
+          and infrastructure automation.
         </p>
+
         <div class="hero-actions">
           <a class="button button-primary" href="#pipeline"
             >Explore the workflow <span aria-hidden="true">↓</span></a
           >
+
           <a
             class="button button-secondary"
             href="https://github.com/GitWithKomal/QuickServe/actions"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             >View workflow runs ↗</a
           >
         </div>
+
         <p class="hero-note">
           A portfolio dashboard for project documentation and evidence. It does
           not connect to or monitor a live production cluster.
@@ -651,55 +1035,71 @@
         <div class="section-head">
           <div>
             <div class="kicker">At a glance</div>
+
             <h2 id="overview-title">Project overview</h2>
+
             <p class="section-desc">
               A lightweight NGINX-served app surrounded by DevOps practice
               workflows and infrastructure labs.
             </p>
           </div>
+
           <a
             class="text-link"
             href="https://github.com/GitWithKomal/QuickServe"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             >Explore source code ↗</a
           >
         </div>
+
         <div class="grid metrics">
           <article class="card metric">
             <div class="metric-top">
               <span class="label">Demo application</span
               ><span class="iconbox" aria-hidden="true">⌁</span>
             </div>
+
             <strong>QuickServe v1.3</strong>
+
             <small>Static health-page demo</small>
           </article>
+
           <article class="card metric">
             <div class="metric-top">
               <span class="label">Automation</span
               ><span class="iconbox" aria-hidden="true">⇄</span>
             </div>
+
             <strong>GitHub Actions</strong>
+
             <small>CI and Pages deployment workflows</small>
           </article>
+
           <article class="card metric">
             <div class="metric-top">
               <span class="label">Image delivery</span
               ><span class="iconbox" aria-hidden="true">▣</span>
             </div>
+
             <strong>Docker + GHCR</strong>
+
             <small>Container build and registry practice</small>
           </article>
+
           <article class="card metric">
             <div class="metric-top">
               <span class="label">Infrastructure labs</span
               ><span class="iconbox" aria-hidden="true">◇</span>
             </div>
+
             <strong>K8s · Helm · Ansible</strong>
+
             <small>Configuration and orchestration practice</small>
           </article>
         </div>
       </section>
+
       <section
         class="section shell"
         id="activity"
@@ -709,12 +1109,15 @@
           <div class="section-head">
             <div>
               <div class="kicker">GitHub Actions · Live Activity</div>
+
               <h2 id="activity-title">Workflow run history</h2>
+
               <p class="section-desc">
                 The latest available runs for QuickServe's CI, Docker
                 publishing, and GitHub Pages deployment workflows.
               </p>
             </div>
+
             <button
               class="button button-secondary"
               id="refreshActivity"
@@ -736,14 +1139,19 @@
           <div class="grid two-col" id="activityRuns">
             <article class="card panel-pad">
               <h3>QuickServe CI</h3>
+
               <p>Waiting for GitHub Actions data…</p>
             </article>
+
             <article class="card panel-pad">
               <h3>Docker Build and Push</h3>
+
               <p>Waiting for GitHub Actions data…</p>
             </article>
+
             <article class="card panel-pad">
               <h3>Deploy static content to Pages</h3>
+
               <p>Waiting for GitHub Actions data…</p>
             </article>
           </div>
@@ -752,14 +1160,16 @@
             These results come from GitHub's public API. They describe workflow
             runs, not the health of a running Kubernetes cluster or cloud
             service.
+          </p>
+          <div class="activity-links">
             <a
               class="text-link"
               href="https://github.com/GitWithKomal/QuickServe/actions"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >Open all workflow runs ↗</a
             >
-          </p>
+          </div>
         </div>
       </section>
 
@@ -772,51 +1182,82 @@
           <div class="section-head">
             <div>
               <div class="kicker">Observability stack</div>
+
               <h2 id="monitoring-title">Monitoring &amp; observability</h2>
+
               <p class="section-desc">
-                Monitor Kubernetes deployment metrics, resource usage,
-                and alert conditions using Prometheus and Grafana.
+                Monitor Kubernetes deployment health, resource utilization,
+                endpoint availability, and alert conditions using Prometheus,
+                Grafana, and Alertmanager.
               </p>
             </div>
           </div>
+
           <div class="grid two-col">
             <article class="card panel-pad">
               <h3>Grafana</h3>
+
               <p class="section-desc">
-                Visualize deployment health, CPU, memory, pod restarts,
-                and node metrics.
+                Visualize deployment health, CPU and memory usage, pod restarts,
+                and Kubernetes node metrics through a custom QuickServe
+                operations dashboard.
               </p>
-              <p><a class="text-link" href="http://localhost:3001"
-                target="_blank" rel="noopener noreferrer">Open Grafana &rarr;</a></p>
-              <small class="label">Local endpoint: localhost:3001</small>
+
+              <p>
+                <a
+                  class="text-link"
+                  href="https://github.com/GitWithKomal/QuickServe/blob/main/docs/monitoring/quickserve-grafana-dashboard.png"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >View Dashboard Screenshot &rarr;</a
+                >
+              </p>
+
+              <p>
+                <a
+                  class="text-link"
+                  href="https://github.com/GitWithKomal/QuickServe/blob/main/docs/monitoring/quickserve-grafana-dashboard.json"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >View Dashboard JSON &rarr;</a
+                >
+              </p>
+
+              <small class="label">Local service: localhost:3001</small>
             </article>
+
             <article class="card panel-pad">
               <h3>Prometheus</h3>
+
               <p class="section-desc">
-                Explore Kubernetes metrics, scrape targets,
-                and QuickServe alert rules.
+                Collect and query Kubernetes metrics, monitor scrape targets,
+                and evaluate QuickServe alert rules.
               </p>
-              <p><a class="text-link" href="http://localhost:9090"
-                target="_blank" rel="noopener noreferrer">Open Prometheus &rarr;</a></p>
-              <small class="label">Local endpoint: localhost:9090</small>
+
+              <small class="label">Local service: localhost:9090</small>
             </article>
+
             <article class="card panel-pad">
               <h3>Alertmanager</h3>
+
               <p class="section-desc">
-                Inspect alert states and notification routing.
+                Manage alert states and explore alert grouping, notification
+                routing, and alert handling.
               </p>
-              <p><a class="text-link" href="http://localhost:9093"
-                target="_blank" rel="noopener noreferrer">Open Alertmanager &rarr;</a></p>
-              <small class="label">Local endpoint: localhost:9093</small>
+
+              <small class="label">Local service: localhost:9093</small>
             </article>
           </div>
+
           <p class="status-note">
-            These are local lab services, not publicly hosted dashboards.
-            Access requires Minikube and the corresponding port-forward
-            sessions to be active.
+            <strong>Environment:</strong> Local Minikube Kubernetes lab. These
+            monitoring services are not publicly hosted. Access requires
+            Minikube and the corresponding Kubernetes port-forward sessions to
+            be active.
           </p>
         </div>
       </section>
+
       <section
         class="section shell"
         id="pipeline"
@@ -826,23 +1267,27 @@
           <div class="section-head">
             <div>
               <div class="kicker">Delivery workflow</div>
+
               <h2 id="pipeline-title">
                 Follow the path from source to runtime
               </h2>
+
               <p class="section-desc">
                 Explore the components in the repository. The diagram represents
                 the learning workflow, not a claim that every stage is currently
                 running as one integrated deployment.
               </p>
             </div>
+
             <a
               class="text-link"
               href="https://github.com/GitWithKomal/QuickServe/actions"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >Inspect actual runs ↗</a
             >
           </div>
+
           <div
             class="pipeline-flow"
             role="list"
@@ -853,7 +1298,7 @@
               role="listitem"
               href="https://github.com/GitWithKomal/QuickServe"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <span class="stage-num">STAGE 01</span
               ><strong>Git & GitHub</strong
@@ -861,12 +1306,13 @@
                 >Version control, commits, branches and pull requests.</span
               >
             </a>
+
             <a
               class="stage"
               role="listitem"
               href="https://github.com/GitWithKomal/QuickServe/actions/workflows/ci.yml"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <span class="stage-num">STAGE 02</span
               ><strong>GitHub Actions</strong
@@ -874,40 +1320,44 @@
                 >Lightweight source checks and automated workflow runs.</span
               >
             </a>
+
             <a
               class="stage"
               role="listitem"
               href="https://github.com/GitWithKomal/QuickServe/actions/workflows/docker.yml"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <span class="stage-num">STAGE 03</span
               ><strong>Docker & GHCR</strong
               ><span>Build container images and publish to the registry.</span>
             </a>
+
             <a
               class="stage"
               role="listitem"
               href="https://github.com/GitWithKomal/QuickServe/tree/main/k8s"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <span class="stage-num">STAGE 04</span><strong>Kubernetes</strong
               ><span
                 >Deployment and Service manifests for hands-on practice.</span
               >
             </a>
+
             <a
               class="stage"
               role="listitem"
               href="https://github.com/GitWithKomal/QuickServe/tree/main/quickserve-chart"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <span class="stage-num">STAGE 05</span><strong>Helm</strong
               ><span>Package and configure Kubernetes resources.</span>
             </a>
           </div>
+
           <div class="status-note">
             <span aria-hidden="true">ⓘ</span
             ><span
@@ -927,9 +1377,11 @@
         <div class="section-head">
           <div>
             <div class="kicker">System map</div>
+
             <h2 id="architecture-title">
               Separate labs, clear responsibilities
             </h2>
+
             <p class="section-desc">
               QuickServe's repository contains related practice areas. They are
               documented separately rather than presented as one production
@@ -937,34 +1389,44 @@
             </p>
           </div>
         </div>
+
         <div class="grid two-col">
           <article class="card panel-pad">
             <div class="eyebrow">01 / Application delivery</div>
+
             <div class="list">
               <div class="list-item">
                 <span class="mini-icon" aria-hidden="true">⌘</span>
+
                 <div>
                   <strong>Source & CI</strong>
+
                   <p>
                     GitHub repository, pull requests and lightweight GitHub
                     Actions checks.
                   </p>
                 </div>
               </div>
+
               <div class="list-item">
                 <span class="mini-icon" aria-hidden="true">▣</span>
+
                 <div>
                   <strong>Container packaging</strong>
+
                   <p>
                     NGINX-based Docker image and a GHCR image publishing
                     workflow.
                   </p>
                 </div>
               </div>
+
               <div class="list-item">
                 <span class="mini-icon" aria-hidden="true">◇</span>
+
                 <div>
                   <strong>Orchestration practice</strong>
+
                   <p>
                     Kubernetes manifests, Service networking, Ingress
                     configuration and Helm templates.
@@ -972,39 +1434,50 @@
                 </div>
               </div>
             </div>
+
             <div class="tag-row">
               <span class="tag">Git</span><span class="tag">GitHub Actions</span
               ><span class="tag">Docker</span><span class="tag">GHCR</span
               ><span class="tag">Kubernetes</span><span class="tag">Helm</span>
             </div>
           </article>
+
           <article class="card panel-pad">
             <div class="eyebrow">02 / Configuration & cloud lab</div>
+
             <div class="list">
               <div class="list-item">
                 <span class="mini-icon" aria-hidden="true">⚙</span>
+
                 <div>
                   <strong>Jenkins pipeline</strong>
+
                   <p>
                     Practice building, verifying, tagging and publishing
                     container images.
                   </p>
                 </div>
               </div>
+
               <div class="list-item">
                 <span class="mini-icon" aria-hidden="true">⌁</span>
+
                 <div>
                   <strong>Ansible NGINX lab</strong>
+
                   <p>
                     Inventory, SSH access, service configuration, port-conflict
                     troubleshooting and idempotency.
                   </p>
                 </div>
               </div>
+
               <div class="list-item">
                 <span class="mini-icon" aria-hidden="true">☁</span>
+
                 <div>
                   <strong>Separate React + AWS lab</strong>
+
                   <p>
                     Vite, multi-stage Docker build, ECR and an ECS deployment
                     script. This is separate from QuickServe's main workflow.
@@ -1012,6 +1485,7 @@
                 </div>
               </div>
             </div>
+
             <div class="tag-row">
               <span class="tag">Jenkins</span><span class="tag">Ansible</span
               ><span class="tag">AWS CLI</span
@@ -1025,95 +1499,121 @@
         <div class="section-head">
           <div>
             <div class="kicker">Hands-on practice</div>
+
             <h2 id="labs-title">Explore the engineering labs</h2>
+
             <p class="section-desc">
               Each resource opens the corresponding repository files so
               reviewers can inspect the implementation directly.
             </p>
           </div>
         </div>
+
         <div class="grid resource-grid">
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">▣</div>
+
             <h3>Docker & Compose</h3>
+
             <p>
               Build the NGINX image, run the container, and inspect the local
               HTTP response.
             </p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe/blob/main/Dockerfile"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >View Dockerfile ↗</a
             >
           </article>
+
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">⇄</div>
+
             <h3>GitHub Actions</h3>
+
             <p>
               Review the CI workflow and Pages deployment configuration and
               inspect recorded runs.
             </p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe/actions"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >View workflow history ↗</a
             >
           </article>
+
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">⚙</div>
+
             <h3>Jenkins pipeline</h3>
+
             <p>
               Explore the pipeline definition used for container build and image
               publishing practice.
             </p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe/blob/main/Jenkinsfile"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >View Jenkinsfile ↗</a
             >
           </article>
+
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">◇</div>
+
             <h3>Kubernetes</h3>
+
             <p>
               Inspect Deployment and Service manifests used in the local
               orchestration exercises.
             </p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe/tree/main/k8s"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >View manifests ↗</a
             >
           </article>
+
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">⌘</div>
+
             <h3>Helm chart</h3>
+
             <p>
               Review chart values and templates for configurable Kubernetes
               resources.
             </p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe/tree/main/quickserve-chart"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >Explore chart ↗</a
             >
           </article>
+
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">⚑</div>
+
             <h3>Ansible configuration</h3>
+
             <p>
               Follow the NGINX setup lab, SSH configuration, troubleshooting and
               repeat-run validation.
             </p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe/tree/main/labs/ansible-nginx"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >Explore Ansible lab ↗</a
             >
           </article>
@@ -1127,8 +1627,10 @@
       >
         <div class="notice">
           <div class="notice-icon" aria-hidden="true">ⓘ</div>
+
           <div>
             <h3>Honest status, useful evidence</h3>
+
             <p>
               This is a static portfolio dashboard, not a monitoring agent. It
               does not query Kubernetes, Jenkins, AWS, Prometheus or Grafana.
@@ -1138,47 +1640,61 @@
             </p>
           </div>
         </div>
+
         <div class="section-head" style="margin-top: 30px">
           <div>
             <div class="kicker">Continue exploring</div>
+
             <h2 id="resources-title">Go deeper into the project</h2>
           </div>
         </div>
+
         <div class="grid resource-grid">
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">↗</div>
+
             <h3>GitHub repository</h3>
+
             <p>
               Source files, README, manifests, workflows and lab documentation.
             </p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >Open repository ↗</a
             >
           </article>
+
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">◷</div>
+
             <h3>Workflow runs</h3>
+
             <p>Inspect actual GitHub Actions run records and their outcomes.</p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe/actions"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >Open Actions ↗</a
             >
           </article>
+
           <article class="card resource">
             <div class="resource-icon" aria-hidden="true">⌁</div>
+
             <h3>Docker local setup</h3>
+
             <p>
               Use the README to build and run QuickServe on your own machine.
             </p>
+
             <a
               href="https://github.com/GitWithKomal/QuickServe#run-quickserve-locally-with-docker"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               >Read setup steps ↗</a
             >
           </article>
@@ -1191,38 +1707,53 @@
         <span
           ><strong>QuickServe</strong> · DevOps learning & portfolio lab</span
         >
+
         <span
           >Built with HTML, CSS and vanilla JavaScript ·
+
           <a class="back-top" href="#top">Back to top ↑</a></span
         >
       </div>
     </footer>
+
     <script>
       const menuToggle = document.getElementById("menuToggle");
+
       const navlinks = document.getElementById("navlinks");
+
       menuToggle.addEventListener("click", () => {
         const isOpen = navlinks.classList.toggle("open");
+
         menuToggle.setAttribute("aria-expanded", String(isOpen));
       });
+
       navlinks.querySelectorAll("a").forEach((link) => {
         link.addEventListener("click", () => {
           navlinks.classList.remove("open");
+
           menuToggle.setAttribute("aria-expanded", "false");
         });
       });
+
       const activityMessage = document.getElementById("activityMessage");
+
       const activityRuns = document.getElementById("activityRuns");
+
       const refreshActivity = document.getElementById("refreshActivity");
 
       const workflows = [
         { name: "QuickServe CI", path: "ci.yml" },
+
         { name: "Docker Build and Push", path: "docker.yml" },
+
         { name: "Deploy static content to Pages", path: "static.yml" },
       ];
 
       function formatDate(value) {
         if (!value) return "Time unavailable";
+
         const date = new Date(value);
+
         return Number.isNaN(date.getTime())
           ? "Time unavailable"
           : date.toLocaleString();
@@ -1230,66 +1761,102 @@
 
       function makeElement(tag, className, content) {
         const element = document.createElement(tag);
+
         if (className) element.className = className;
+
         if (content !== undefined) element.textContent = content;
+
         return element;
+      }
+
+      function createExternalLink(url, label) {
+        const link = makeElement("a", "text-link", label);
+        link.href = url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.referrerPolicy = "no-referrer";
+        return link;
       }
 
       function renderWorkflow(workflow, run) {
         const card = makeElement("article", "card panel-pad");
         card.appendChild(makeElement("h3", "", workflow.name));
 
-        if (!run) {
+        if (run) {
+          const status =
+            run.status === "completed"
+              ? run.conclusion || "completed"
+              : run.status || "unknown";
+
           card.appendChild(
-            makeElement("p", "", "No run found in the recent results."),
+            makeElement("p", "activity-status", "Status: " + status),
           );
-          return card;
-        }
+          card.appendChild(
+            makeElement("p", "", "Branch: " + (run.head_branch || "unknown")),
+          );
+          card.appendChild(
+            makeElement("p", "", "Started: " + formatDate(run.created_at)),
+          );
 
-        const status =
-          run.status === "completed"
-            ? run.conclusion || "completed"
-            : run.status || "unknown";
-
-        card.appendChild(
-          makeElement("p", "activity-status", "Status: " + status),
-        );
-        card.appendChild(
-          makeElement("p", "", "Branch: " + (run.head_branch || "unknown")),
-        );
-        card.appendChild(
-          makeElement("p", "", "Started: " + formatDate(run.created_at)),
-        );
-
-        if (run.run_number !== undefined) {
-          card.appendChild(makeElement("p", "", "Run: #" + run.run_number));
-        }
-
-        try {
-          const url = new URL(run.html_url);
-          if (url.origin === "https://github.com") {
-            const link = makeElement("a", "text-link", "View this run ↗");
-            link.href = url.href;
-            link.target = "_blank";
-            link.rel = "noopener noreferrer";
-            card.appendChild(link);
+          if (run.run_number !== undefined) {
+            card.appendChild(makeElement("p", "", "Run: #" + run.run_number));
           }
-        } catch {
-          // Do not render an invalid run URL.
+
+          // Prefer GitHub's canonical run URL, but validate it before rendering.
+          let runUrl = "";
+          try {
+            const parsedUrl = new URL(run.html_url);
+            if (
+              parsedUrl.protocol === "https:" &&
+              parsedUrl.hostname === "github.com" &&
+              parsedUrl.pathname.startsWith(
+                "/GitWithKomal/QuickServe/actions/runs/",
+              )
+            ) {
+              runUrl = parsedUrl.href;
+            }
+          } catch {
+            // Fall back to the workflow page below if the run URL is invalid.
+          }
+
+          if (runUrl) {
+            card.appendChild(createExternalLink(runUrl, "View this run ↗"));
+          }
+        } else {
+          card.appendChild(
+            makeElement(
+              "p",
+              "",
+              "No recent run found in the returned results.",
+            ),
+          );
         }
+
+        // Always provide a working workflow-level destination, even if the API
+        // is unavailable or a workflow has no recent run in the response.
+        const workflowUrl =
+          "https://github.com/GitWithKomal/QuickServe/actions/workflows/" +
+          encodeURIComponent(workflow.path);
+        card.appendChild(createExternalLink(workflowUrl, "Open workflow ↗"));
 
         return card;
       }
 
       async function loadWorkflowActivity() {
         refreshActivity.disabled = true;
+
         refreshActivity.textContent = "Refreshing…";
+
         activityMessage.textContent = "Fetching recent runs from GitHub…";
 
         try {
           const response = await fetch(
             "https://api.github.com/repos/GitWithKomal/QuickServe/actions/runs?per_page=100",
-            { headers: { Accept: "application/vnd.github+json" } },
+
+            {
+              headers: { Accept: "application/vnd.github+json" },
+              cache: "no-store",
+            },
           );
 
           if (!response.ok) {
@@ -1298,18 +1865,24 @@
                 "GitHub API rate limit reached. Open the Actions page to inspect runs, then try again later.",
               );
             }
+
             throw new Error(
               "GitHub API returned HTTP " + response.status + ".",
             );
           }
 
           const data = await response.json();
+
           const runs = Array.isArray(data.workflow_runs)
-            ? data.workflow_runs
+            ? [...data.workflow_runs].sort(
+                (a, b) =>
+                  new Date(b.created_at || 0) - new Date(a.created_at || 0),
+              )
             : [];
 
           const latestRuns = workflows.map((workflow) => ({
             workflow,
+
             run: runs.find((item) => item.name === workflow.name) || null,
           }));
 
@@ -1320,12 +1893,15 @@
           );
 
           const found = latestRuns.filter((item) => item.run).length;
+
           activityMessage.textContent =
-            "GitHub API connected. Found recent runs for " +
+            "GitHub API connected · " +
             found +
             " of " +
             workflows.length +
-            " workflows. Statuses reflect the latest returned runs, not live infrastructure health.";
+            " workflows found · Updated " +
+            new Date().toLocaleTimeString() +
+            ". Workflow records do not indicate live infrastructure health.";
         } catch (error) {
           activityMessage.textContent =
             "Unable to load workflow activity: " +
@@ -1333,22 +1909,17 @@
             " Check the repository Actions page for the latest information.";
 
           activityRuns.replaceChildren(
-            ...workflows.map((workflow) => {
-              const card = makeElement("article", "card panel-pad");
-              card.appendChild(makeElement("h3", "", workflow.name));
-              card.appendChild(
-                makeElement("p", "", "Run data currently unavailable."),
-              );
-              return card;
-            }),
+            ...workflows.map((workflow) => renderWorkflow(workflow, null)),
           );
         } finally {
           refreshActivity.disabled = false;
+
           refreshActivity.textContent = "Refresh runs";
         }
       }
 
       refreshActivity.addEventListener("click", loadWorkflowActivity);
+
       loadWorkflowActivity();
     </script>
   </body>
